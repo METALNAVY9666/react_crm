@@ -1,17 +1,25 @@
-import Modal from "react-bootstrap/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
+import axios from "axios";
+import { apiUrl } from "./basics";
+import { getBasicFormData } from "./Functions";
+import { Modal } from "react-bootstrap";
 import CarImage from "./CarImage";
-import AddImageModal from "./AddImageModal";
+import { AddImageModal } from "./AddImageModal";
 
 interface Props {
   data: any[];
-  files: string[];
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
+  setUpdateParentImage: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function CarModal({ data, files, show, setShow }: Props) {
+export default function CarModal({
+  data,
+  show,
+  setShow,
+  setUpdateParentImage,
+}: Props) {
   const [plate, setPlate] = useState(data[0]);
   const [owner, setOwner] = useState(data[1]);
   const [brand, setBrand] = useState(data[2]);
@@ -22,17 +30,47 @@ export default function CarModal({ data, files, show, setShow }: Props) {
   const [kilometers, setKilometers] = useState(data[7]);
   const [dealership, setDealership] = useState(data[8]);
   const [description, setDescription] = useState(data[9]);
-  const [images, setImages] = useState(files);
+  const [filenames, setFilenames] = useState<Array<string>>([]);
 
   // prend un compte si des changements ont été effectués
   const [changes, setChanges] = useState<boolean>(false);
   const [showImages, setShowImages] = useState<boolean>(false);
   const [showAddImageModal, setShowAddImageModal] = useState(false);
 
+  useEffect(() => {
+    const formData = getBasicFormData();
+    formData.append("plate", plate);
+    axios.post(apiUrl + "get_image_list", formData).then((response) => {
+      setFilenames(response.data.images);
+    });
+  }, []);
+
+  const handleConfirm = () => {
+    if (changes) {
+      // mettre à jour les changements
+    }
+    setShow(false);
+  };
+
+  if (changes) {
+    console.log("changements reçus par le modal");
+    setChanges(false);
+    setUpdateParentImage(true);
+    const formData = getBasicFormData();
+    formData.append("plate", plate);
+    axios.post(apiUrl + "get_image_list", formData).then((response) => {
+      setFilenames(response.data.images);
+    });
+  }
+
   return (
     <>
       {showAddImageModal ? (
-        <AddImageModal setShow={setShowAddImageModal} />
+        <AddImageModal
+          plate={plate}
+          setShow={setShowAddImageModal}
+          setChanges={setChanges}
+        />
       ) : null}
       <Modal show={show} backdrop="static" keyboard={false}>
         <Modal.Header>
@@ -40,9 +78,8 @@ export default function CarModal({ data, files, show, setShow }: Props) {
         </Modal.Header>
 
         <Modal.Body>
-          {images.length > 0 ? (
+          {filenames.length > 0 ? (
             <button
-              className="btn btn-primary"
               style={{ margin: "0 auto" }}
               onClick={() => {
                 setShowImages(!showImages);
@@ -52,19 +89,18 @@ export default function CarModal({ data, files, show, setShow }: Props) {
             </button>
           ) : null}
           <div className={showImages ? "row" : "d-none"}>
-            {images.map((x) => (
+            {filenames.map((x) => (
               <div className="col" key={x}>
                 <CarImage
                   plate={plate}
                   filename={x}
-                  style={{ maxHeight: "20vh" }}
+                  style={{ maxHeight: "40vh" }}
                 />
               </div>
             ))}
           </div>
 
           <button
-            className="btn btn-primary"
             onClick={() => {
               setShowAddImageModal(true);
             }}
@@ -74,14 +110,7 @@ export default function CarModal({ data, files, show, setShow }: Props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <button
-            onClick={() => {
-              if (changes) {
-                // mettre à jour les changements
-              }
-              setShow(false);
-            }}
-          >
+          <button onClick={handleConfirm}>
             Fermer {changes ? "et enregistrer" : null}
           </button>
         </Modal.Footer>

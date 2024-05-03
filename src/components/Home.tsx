@@ -6,11 +6,13 @@ import SideBar from "./SideBar";
 import { useEffect, useState } from "react";
 import TopCarBar from "./TopCarBar";
 import AddCarModal from "./AddCarModal";
+import { Spinner } from "react-bootstrap";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
   const [showAddCarModal, setShowAddCarModal] = useState(false);
   const refreshCars = () => {
+    setCars([]);
     if (!isLogged()) {
       return;
     }
@@ -31,6 +33,12 @@ export default function Home() {
         ></TopCarBar>
         <div className="container">
           <div className="row">
+            {cars.length == 0 ? (
+              <div>
+                <Spinner />
+                Chargement des véhicules
+              </div>
+            ) : null}
             {cars.map((car) => (
               <CarThumbnail key={car[0]} data={car} />
             ))}

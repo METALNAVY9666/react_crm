@@ -53,21 +53,23 @@ export default function SearchBox({
         </button>
       ) : null}
       <br />
-      {!confirmed
-        ? array.map((x, index) => (
-            <button
-              key={index}
-              className="btn m-1"
-              onClick={() => {
-                setConfirmed(true);
-                setText(x);
-                parentUpdateMethod(x);
-              }}
-            >
-              {x}
-            </button>
-          ))
-        : null}
+      <div>
+        {!confirmed
+          ? array.map((x, index) => (
+              <button
+                key={index}
+                className="btn m-1"
+                onClick={() => {
+                  setConfirmed(true);
+                  setText(x);
+                  parentUpdateMethod(x);
+                }}
+              >
+                {x}
+              </button>
+            ))
+          : null}
+      </div>
       {!confirmed ? <br /> : null}
     </>
   );

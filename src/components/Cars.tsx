@@ -15,6 +15,7 @@ export function CarThumbnail({ data }: Props) {
   const [images, setImages] = useState<Array<string>>([]);
   const plate = data[0];
   const [divClass, setDivClass] = useState<string>("border rounded");
+  const [updateThisImage, setUpdateThisImage] = useState<boolean>(false);
 
   // setting the image list
   useEffect(() => {
@@ -26,14 +27,24 @@ export function CarThumbnail({ data }: Props) {
     });
   }, []);
 
+  if (updateThisImage) {
+    setUpdateThisImage(false);
+    const formData = getBasicFormData();
+    formData.append("plate", plate);
+    axios.post(apiUrl + "get_image_list", formData).then((response) => {
+      const images = response.data.images;
+      setImages(images);
+    });
+  }
+
   return (
     <>
       <div className="col-3 my-2">
         <CarModal
           data={data}
-          files={images}
           show={showModal}
           setShow={setShowModal}
+          setUpdateParentImage={setUpdateThisImage}
         />
         <div
           className={divClass}
