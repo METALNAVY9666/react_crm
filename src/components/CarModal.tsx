@@ -6,6 +6,12 @@ import { getBasicFormData } from "./Functions";
 import { Modal } from "react-bootstrap";
 import CarImage from "./CarImage";
 import { AddImageModal } from "./AddImageModal";
+import Entry from "./CarModalComponents/Entry";
+import SearchBox from "./SearchBox";
+import { brands, fuels } from "./consts";
+import YearPick from "./CarModalComponents/YearPick";
+import InputNumber from "./CarModalComponents/InputNumber";
+import TextArea from "./CarModalComponents/TextArea";
 
 interface Props {
   data: any[];
@@ -20,16 +26,24 @@ export default function CarModal({
   setShow,
   setUpdateParentImage,
 }: Props) {
-  const [plate, setPlate] = useState(data[0]);
-  const [owner, setOwner] = useState(data[1]);
-  const [brand, setBrand] = useState(data[2]);
-  const [model, setModel] = useState(data[3]);
-  const [year, setYear] = useState(data[4]);
-  const [fuel, setFuel] = useState(data[5]);
-  const [price, setPrice] = useState(data[6]);
-  const [kilometers, setKilometers] = useState(data[7]);
-  const [dealership, setDealership] = useState(data[8]);
-  const [description, setDescription] = useState(data[9]);
+  useEffect(() => {
+    console.log(data);
+  }, []);
+
+  //constantes
+  const plate: string = data[0];
+  const [models, setModels] = useState<Array<string>>([]);
+
+  // variables
+  const [owner, setOwner] = useState<string>(data[1]);
+  const [brand, setBrand] = useState<string>(data[2]);
+  const [model, setModel] = useState<string>(data[3]);
+  const [year, setYear] = useState<number>(data[4]);
+  const [fuel, setFuel] = useState<string>(data[5]);
+  const [price, setPrice] = useState<number>(data[6]);
+  const [kilometers, setKilometers] = useState<number>(data[7]);
+  const [dealership, setDealership] = useState<string>(data[8]);
+  const [description, setDescription] = useState<string>(data[9]);
   const [filenames, setFilenames] = useState<Array<string>>([]);
 
   // prend un compte si des changements ont été effectués
@@ -45,23 +59,63 @@ export default function CarModal({
     });
   }, []);
 
+  const handleBrandChange = (b: string) => {
+    setChanges(true);
+    const formData = getBasicFormData();
+    formData.append("brand", b);
+    axios.post(apiUrl + "modeles", formData).then((response) => {
+      if (response.data.message !== "success") {
+        return;
+      }
+      setModels(response.data.data);
+    });
+    setBrand(b);
+  };
+
+  const handleModelChange = (m: string) => {
+    setChanges(true);
+    setModel(m);
+  };
+
+  const handleFuelChange = (f: string) => {
+    setChanges(true);
+    setFuel(f);
+  };
+
   const handleConfirm = () => {
     if (changes) {
       // mettre à jour les changements
+      let formData: FormData;
+      formData = getBasicFormData();
+      formData.append(
+        "car",
+        JSON.stringify([
+          plate,
+          owner,
+          brand,
+          model,
+          year,
+          fuel,
+          price,
+          kilometers,
+          dealership,
+          description,
+        ])
+      );
+      console.log(formData);
+      axios.post(apiUrl + "update_car", formData);
+
+      // update le Thumbnail de la liste des véhicules
+      setChanges(false);
+      setUpdateParentImage(true);
+      formData = getBasicFormData();
+      formData.append("plate", plate);
+      axios.post(apiUrl + "get_image_list", formData).then((response) => {
+        setFilenames(response.data.images);
+      });
     }
     setShow(false);
   };
-
-  if (changes) {
-    console.log("changements reçus par le modal");
-    setChanges(false);
-    setUpdateParentImage(true);
-    const formData = getBasicFormData();
-    formData.append("plate", plate);
-    axios.post(apiUrl + "get_image_list", formData).then((response) => {
-      setFilenames(response.data.images);
-    });
-  }
 
   return (
     <>
@@ -78,6 +132,62 @@ export default function CarModal({
         </Modal.Header>
 
         <Modal.Body>
+          <Entry
+            title="Propriétaire"
+            defaultValue={owner}
+            updateValue={setOwner}
+            setChanges={setChanges}
+          />
+
+          <SearchBox
+            ogArray={brands}
+            title="Marque"
+            parentUpdateMethod={handleBrandChange}
+            defaultValue={brand}
+          />
+
+          <SearchBox
+            ogArray={models}
+            title="Modèle"
+            parentUpdateMethod={handleModelChange}
+            defaultValue={model}
+          />
+
+          <YearPick
+            title="Année"
+            defaultValue={String(year)}
+            setState={setYear}
+            setChanges={setChanges}
+          />
+
+          <SearchBox
+            ogArray={fuels}
+            title="Carburants"
+            parentUpdateMethod={handleFuelChange}
+            defaultValue={fuel}
+          />
+
+          <InputNumber
+            title="Prix"
+            defaultValue={price}
+            setState={setPrice}
+            setChanges={setChanges}
+          />
+
+          <InputNumber
+            title="Kilométrage"
+            defaultValue={kilometers}
+            setState={setKilometers}
+            setChanges={setChanges}
+          />
+
+          <TextArea
+            title="Description"
+            defaultValue={description}
+            setState={setDescription}
+            setChanges={setChanges}
+          />
+
           {filenames.length > 0 ? (
             <button
               style={{ margin: "0 auto" }}

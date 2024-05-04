@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import axios from "axios";
 import { getCookie, setCookie } from "typescript-cookie";
 import { sha256 } from "js-sha256";
-import button from "react-bootstrap/button";
 import { Form } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import { apiUrl } from "./basics";
@@ -21,14 +20,10 @@ export default function LoginModal(props: Props) {
   const [password, setPassword] = useState("");
 
   // gestion majs
-  const handleUsernameChange = (
-    event: React.ChangeEventHandler<FormControlElement>
-  ) => {
+  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.currentTarget.value);
   };
-  const handlePasswordChange = (
-    event: React.ChangeEventHandler<FormControlElement>
-  ) => {
+  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(sha256.create().update(event.currentTarget.value).hex());
   };
 
@@ -87,10 +82,14 @@ export default function LoginModal(props: Props) {
         </Modal.Body>
 
         <Modal.Footer>
-          <button id="exit-btn" variant="secondary" onClick={handleClose}>
+          <button
+            id="exit-btn"
+            className="btn btn-secondary"
+            onClick={handleClose}
+          >
             Mot de passe oublié
           </button>
-          <button id="login-btn" variant="primary" onClick={handleLogin}>
+          <button id="login-btn" className="btn" onClick={handleLogin}>
             Se connecter
           </button>
         </Modal.Footer>

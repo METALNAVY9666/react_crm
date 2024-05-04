@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
+import "react-datetime/css/react-datetime.css";
 import { useEffect, useState } from "react";
 import LoginModal from "./components/LoginModal";
 import Home from "./components/Home";

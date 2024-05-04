@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { Form } from "react-bootstrap";
 
 interface Props {
@@ -6,6 +6,7 @@ interface Props {
   title: string;
   parentUpdateMethod: (text: string) => void;
   restrictive?: boolean;
+  defaultValue?: string;
 }
 
 export default function SearchBox({
@@ -13,6 +14,7 @@ export default function SearchBox({
   title,
   parentUpdateMethod,
   restrictive = false,
+  defaultValue = "",
 }: Props) {
   const [text, setText] = useState("Changer la valeur");
   const [array, setArray] = useState<string[]>(ogArray);
@@ -33,8 +35,15 @@ export default function SearchBox({
     }
   };
 
+  useEffect(() => {
+    if (defaultValue.length > 0) {
+      setConfirmed(true);
+      setText(defaultValue);
+    }
+  }, []);
+
   return (
-    <>
+    <div className="m-3">
       <Form.Label>{title}</Form.Label>
       <br />
       {!confirmed ? (
@@ -71,6 +80,6 @@ export default function SearchBox({
           : null}
       </div>
       {!confirmed ? <br /> : null}
-    </>
+    </div>
   );
 }
