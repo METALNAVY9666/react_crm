@@ -2,7 +2,6 @@ import { apiUrl } from "./basics";
 import axios from "axios";
 import { CarThumbnail } from "./Cars";
 import { getBasicFormData, isLogged } from "./Functions";
-import SideBar from "./SideBar";
 import { useEffect, useState } from "react";
 import TopCarBar from "./TopCarBar";
 import AddCarModal from "./AddCarModal";
@@ -26,25 +25,24 @@ export default function Home() {
   return (
     <>
       {showAddCarModal ? <AddCarModal setShow={setShowAddCarModal} /> : null}
-      <SideBar>
-        <TopCarBar
-          addCarModal={setShowAddCarModal}
-          reloadCars={refreshCars}
-        ></TopCarBar>
-        <div className="container">
-          <div className="row">
-            {cars.length == 0 ? (
-              <div>
-                <Spinner />
-                Chargement des véhicules
-              </div>
-            ) : null}
-            {cars.map((car) => (
-              <CarThumbnail key={car[0]} data={car} />
-            ))}
-          </div>
+
+      <TopCarBar
+        addCarModal={setShowAddCarModal}
+        reloadCars={refreshCars}
+      ></TopCarBar>
+      <div className="container">
+        <div className="row">
+          {cars.length == 0 ? (
+            <div>
+              <Spinner />
+              Chargement des véhicules
+            </div>
+          ) : null}
+          {cars.map((car) => (
+            <CarThumbnail key={car[0]} data={car} />
+          ))}
         </div>
-      </SideBar>
+      </div>
     </>
   );
 }

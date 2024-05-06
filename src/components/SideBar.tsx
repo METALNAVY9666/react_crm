@@ -1,10 +1,20 @@
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
+import { setCookie } from "typescript-cookie";
+import imakiImage from "../assets/imaki.png";
 
 interface Props {
+  scene: string;
+  setScene: Dispatch<SetStateAction<string>>;
+  logged: boolean;
   children?: ReactNode;
 }
 
-export default function SideBar({ children }: Props) {
+export default function SideBar({ scene, setScene, logged, children }: Props) {
+  const updateScene = (s: string) => {
+    setCookie("previousScene", s);
+    setScene(s);
+  };
+
   return (
     <>
       <div className="container-fluid">
@@ -12,69 +22,83 @@ export default function SideBar({ children }: Props) {
           <div className="col-sm-auto bg-light sticky-top">
             <div className="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top">
               <a
-                href="/"
-                className="d-block p-3 link-dark text-decoration-none"
+                className="d-block p-3 text-decoration-none link-dark"
                 title=""
                 data-bs-toggle="tooltip"
                 data-bs-placement="right"
                 data-bs-original-title="Icon-only"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  if (logged) {
+                    updateScene("dashboard");
+                  }
+                }}
               >
-                <i className="bi-bootstrap fs-1"></i>
+                <img
+                  src={imakiImage}
+                  style={{ width: "80px" }}
+                  className="rounded"
+                />
               </a>
               <ul className="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center">
                 <li className="nav-item">
                   <a
-                    href="#"
-                    className="nav-link py-3 px-2"
+                    className="nav-link py-3 px-2 link-dark"
                     title=""
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
                     data-bs-original-title="Home"
+                    onClick={() => {
+                      if (logged) {
+                        updateScene("home");
+                      }
+                    }}
+                    style={{ cursor: "pointer" }}
                   >
-                    <i className="bi-house fs-1"></i>
+                    <i className={"bi-house fs-1"}></i>
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="nav-link py-3 px-2"
+                    className="nav-link py-3 px-2 link-dark"
                     title=""
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
                     data-bs-original-title="Dashboard"
+                    style={{ cursor: "pointer" }}
                   >
                     <i className="bi-speedometer2 fs-1"></i>
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="nav-link py-3 px-2"
+                    className="nav-link py-3 px-2 link-dark"
                     title=""
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
                     data-bs-original-title="Orders"
+                    style={{ cursor: "pointer" }}
                   >
                     <i className="bi-table fs-1"></i>
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="nav-link py-3 px-2"
+                    className="nav-link py-3 px-2 link-dark"
                     title=""
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
                     data-bs-original-title="Products"
+                    style={{ cursor: "pointer" }}
                   >
                     <i className="bi-heart fs-1"></i>
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="nav-link py-3 px-2"
-                    title=""
+                    title="Équipe"
+                    style={{ cursor: "pointer" }}
+                    className="nav-link py-3 px-2 link-dark"
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
                     data-bs-original-title="Customers"
@@ -83,36 +107,18 @@ export default function SideBar({ children }: Props) {
                   </a>
                 </li>
               </ul>
-              <div className="dropdown">
+              <div className="nav-item">
                 <a
-                  href="#"
-                  className="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle"
-                  id="dropdownUser3"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  style={{ cursor: "pointer" }}
+                  title="Paramètres"
+                  onClick={() => {
+                    if (logged) {
+                      updateScene("settings");
+                    }
+                  }}
                 >
-                  <i className="bi-person-circle h2"></i>
+                  <i className="bi-person-circle h2" />
                 </a>
-                <ul
-                  className="dropdown-menu text-small shadow"
-                  aria-labelledby="dropdownUser3"
-                >
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      New project...
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Profile
-                    </a>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

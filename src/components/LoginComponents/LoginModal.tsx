@@ -1,16 +1,17 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, SetStateAction, Dispatch } from "react";
 import axios from "axios";
 import { getCookie, setCookie } from "typescript-cookie";
 import { sha256 } from "js-sha256";
 import { Form } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import { apiUrl } from "./basics";
+import { apiUrl } from "../basics";
 
 // https://react-bootstrap.netlify.app/docs/components/modal/
 // https://www.npmjs.com/package/js-sha256
 
 interface Props {
   setLogged: (value: boolean) => void;
+  setScene: Dispatch<SetStateAction<string>>;
 }
 
 export default function LoginModal(props: Props) {
@@ -39,9 +40,10 @@ export default function LoginModal(props: Props) {
     axios.post(apiUrl + "login", formData).then((response) => {
       setMsg(response.data.message);
       if (response.data.message === "Authentification réussie") {
-        props.setLogged(true);
         setCookie("cookie", response.data.cookie);
         setCookie("username", username);
+        props.setLogged(true);
+        props.setScene("dashboard");
       } else {
         props.setLogged(false);
       }
@@ -89,7 +91,16 @@ export default function LoginModal(props: Props) {
           >
             Mot de passe oublié
           </button>
-          <button id="login-btn" className="btn" onClick={handleLogin}>
+          <button
+            id="sign-up-btn"
+            className="btn btn-secondary"
+            onClick={() => {
+              window.location.href = "https://crm.imaki.org";
+            }}
+          >
+            Pas de compte ?
+          </button>
+          <button id="login-btn" className="btn btn-dark" onClick={handleLogin}>
             Se connecter
           </button>
         </Modal.Footer>

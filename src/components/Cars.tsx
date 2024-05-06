@@ -53,7 +53,7 @@ export function CarThumbnail({ data }: Props) {
           onMouseLeave={() => setDivClass("border rounded")}
           onClick={() => setShowModal(true)}
         >
-          <Plate plate={plate} />
+          <Plate plate={plate} percent="90%" />
           <CarImage
             plate={plate}
             filename={images[0]}

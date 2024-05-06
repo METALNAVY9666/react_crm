@@ -12,6 +12,7 @@ import { brands, fuels } from "./consts";
 import YearPick from "./CarModalComponents/YearPick";
 import InputNumber from "./CarModalComponents/InputNumber";
 import TextArea from "./CarModalComponents/TextArea";
+import { Plate } from "./Plate";
 
 interface Props {
   data: any[];
@@ -129,6 +130,7 @@ export default function CarModal({
       <Modal show={show} backdrop="static" keyboard={false}>
         <Modal.Header>
           {brand.toUpperCase()} {model}
+          <Plate plate={plate} percent="200%" />
         </Modal.Header>
 
         <Modal.Body>
@@ -200,7 +202,7 @@ export default function CarModal({
           ) : null}
           <div className={showImages ? "row" : "d-none"}>
             {filenames.map((x) => (
-              <div className="col" key={x}>
+              <div className="col m-3" key={x}>
                 <CarImage
                   plate={plate}
                   filename={x}

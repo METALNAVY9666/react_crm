@@ -1,10 +1,6 @@
 import "./Plate.css";
 import { alphabet, numbers } from "./consts";
 
-interface Props {
-  plate: string;
-}
-
 function isPlateValid(plate: string) {
   plate = plate.toLowerCase();
 
@@ -34,7 +30,12 @@ function isPlateValid(plate: string) {
   return true;
 }
 
-function Plate({ plate }: Props) {
+interface Props {
+  plate: string;
+  percent: string;
+}
+
+function Plate({ plate, percent }: Props) {
   let newPlate = "";
   for (let i = 0; i < 7; i++) {
     newPlate = newPlate + plate.charAt(i);
@@ -47,7 +48,12 @@ function Plate({ plate }: Props) {
     <>
       <div className="overlay-container">
         <img src="./src/assets/empty_plate.png" style={{ width: "100%" }}></img>
-        <div className="centered">{newPlate.toUpperCase()}</div>
+        <div
+          className="centered"
+          style={{ whiteSpace: "nowrap", fontSize: percent }}
+        >
+          {newPlate.toUpperCase()}
+        </div>
       </div>
     </>
   );
