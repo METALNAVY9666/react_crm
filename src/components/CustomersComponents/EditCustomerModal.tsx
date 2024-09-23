@@ -54,7 +54,7 @@ export default function EditCustomerModal({
   };
 
   useEffect(() => {
-    const vars = [fullname, address, number];
+    const vars = [fullname, number, address];
     vars.forEach((x, index) => {
       if (x != customer[index + 1]) {
         setChanged(true);
@@ -80,7 +80,7 @@ export default function EditCustomerModal({
         <AddressAutocomplete setResult={setAdress} defaultValue={address} />
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onConfirmClick} disabled={changed}>
+        <button onClick={onConfirmClick} disabled={!changed}>
           Confirmer
         </button>
         <button onClick={() => setShow(false)}>Annuler</button>

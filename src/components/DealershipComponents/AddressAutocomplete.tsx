@@ -1,14 +1,6 @@
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import axios from "axios";
-import {
-  Form,
-  ListGroup,
-  InputGroup,
-  FormControl,
-  Container,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { ListGroup, FormControl } from "react-bootstrap";
 
 interface AddressSuggestion {
   label: string;
@@ -23,9 +15,9 @@ interface Props {
 function AddressAutocomplete({ setResult, defaultValue = "" }: Props) {
   const [query, setQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<string>("");
   const [selectedAddressWasManual, setSelectedAddressWasManual] =
     useState(false);
+  const [firstLock, setFirstLock] = useState(true);
 
   useEffect(() => {
     setQuery(defaultValue);
@@ -34,6 +26,7 @@ function AddressAutocomplete({ setResult, defaultValue = "" }: Props) {
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (query.length > 2 && !selectedAddressWasManual) {
+        console.log("appel");
         try {
           const response = await axios.get(
             `https://api-adresse.data.gouv.fr/search/?q=${query}`
@@ -42,7 +35,8 @@ function AddressAutocomplete({ setResult, defaultValue = "" }: Props) {
             label: feature.properties.label,
             value: feature.properties.label,
           }));
-          setSuggestions(addresses);
+          if (firstLock) setFirstLock(false);
+          else setSuggestions(addresses);
         } catch (error) {
           console.error("Error fetching address suggestions:", error);
         }
@@ -61,7 +55,6 @@ function AddressAutocomplete({ setResult, defaultValue = "" }: Props) {
   };
 
   const handleSelect = (address: string) => {
-    setSelectedAddress(address);
     setResult(address);
     setSelectedAddressWasManual(true);
     setQuery(address);
