@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import Profile from "./Profile";
+import Socials from "./Socials";
 
 export default function Settings() {
   const [settingsMenu, setSettingsMenu] = useState<string>("profile");
+
+  const subMenus: Record<string, Record<string, string | JSX.Element>> = {
+    profile: { name: "Profil", render: <Profile /> },
+    socials: { name: "Réseaux", render: <Socials /> },
+  };
 
   return (
     <>
@@ -12,23 +18,21 @@ export default function Settings() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link onClick={() => setSettingsMenu("profile")}>
-                Profil <br />
-                {settingsMenu === "profile" ? (
-                  <i className="bi bi-caret-up-fill" />
-                ) : null}
-              </Nav.Link>
-              <Nav.Link onClick={() => setSettingsMenu("appearence")}>
-                Apparence <br />
-                {settingsMenu === "appearence" ? (
-                  <i className="bi bi-caret-up-fill" />
-                ) : null}
-              </Nav.Link>
+              {Object.keys(subMenus).map((subMenu) => (
+                <Nav.Link onClick={() => setSettingsMenu(subMenu)}>
+                  {subMenus[subMenu]["name"]} <br />
+                  {settingsMenu === subMenu ? (
+                    <i className="bi bi-caret-up-fill" />
+                  ) : null}
+                </Nav.Link>
+              ))}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {settingsMenu === "profile" ? <Profile /> : null}
+      {Object.keys(subMenus)
+        .filter((x) => x == settingsMenu)
+        .map((y) => subMenus[y]["render"])}
     </>
   );
 }

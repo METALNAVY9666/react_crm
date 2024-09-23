@@ -55,9 +55,9 @@ export default function CarModal({
   useEffect(() => {
     const formData = getBasicFormData();
     formData.append("plate", plate);
-    axios.post(apiUrl + "get_image_list", formData).then((response) => {
-      setFilenames(response.data.images);
-    });
+    axios
+      .post(apiUrl + "get_image_list", formData)
+      .then((response) => setFilenames(response.data.images));
   }, []);
 
   const handleBrandChange = (b: string) => {
@@ -83,6 +83,16 @@ export default function CarModal({
     setFuel(f);
   };
 
+  const updateParent = () => {
+    setChanges(false);
+    setUpdateParentImage(true);
+    const formData = getBasicFormData();
+    formData.append("plate", plate);
+    axios.post(apiUrl + "get_image_list", formData).then((response) => {
+      setFilenames(response.data.images);
+    });
+  };
+
   const handleConfirm = () => {
     if (changes) {
       // mettre à jour les changements
@@ -105,17 +115,19 @@ export default function CarModal({
       );
       console.log(formData);
       axios.post(apiUrl + "update_car", formData);
-
-      // update le Thumbnail de la liste des véhicules
-      setChanges(false);
-      setUpdateParentImage(true);
-      formData = getBasicFormData();
-      formData.append("plate", plate);
-      axios.post(apiUrl + "get_image_list", formData).then((response) => {
-        setFilenames(response.data.images);
-      });
+      updateParent();
     }
     setShow(false);
+  };
+
+  const handleDelete = () => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce véhicule ")) return;
+    const formData = getBasicFormData();
+    formData.append("plate", plate);
+    axios.post(apiUrl + "remove_car", formData).then(() => {
+      setShow(false);
+    });
+    updateParent();
   };
 
   return (
@@ -127,7 +139,12 @@ export default function CarModal({
           setChanges={setChanges}
         />
       ) : null}
-      <Modal show={show} backdrop="static" keyboard={false}>
+      <Modal
+        show={show}
+        backdrop="static"
+        keyboard={false}
+        style={{ visibility: showAddImageModal ? "hidden" : "visible" }}
+      >
         <Modal.Header>
           {brand.toUpperCase()} {model}
           <Plate plate={plate} percent="200%" />
@@ -222,6 +239,7 @@ export default function CarModal({
         </Modal.Body>
 
         <Modal.Footer>
+          <button onClick={handleDelete}>Supprimer</button>
           <button onClick={handleConfirm}>
             Fermer {changes ? "et enregistrer" : null}
           </button>

@@ -27,7 +27,7 @@ function RandomGreeting({ name }: Props) {
 
   return (
     <>
-      {message} {name} {emoji}
+      {message}, {name} {emoji}
     </>
   );
 }
@@ -47,7 +47,7 @@ export default function Dashboard() {
           .then((response) => setName(response.data.name.split(" ")[0]));
 
         axios
-          .post(apiUrl + "get_dealership", getBasicFormData())
+          .post(apiUrl + "get_dealerships", getBasicFormData())
           .then((response) => console.log(response.data.data));
       }
     });

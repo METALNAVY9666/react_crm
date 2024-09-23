@@ -1,19 +1,22 @@
-import { Modal, Form } from "react-bootstrap";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Modal, Form, Toast } from "react-bootstrap";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { apiUrl } from "./basics";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import SearchBox from "./SearchBox";
 import { brands, fuels } from "./consts";
 import axios from "axios";
-import { getBasicFormData } from "./Functions";
+import { getBasicFormData, notification } from "./Functions";
 import { Plate } from "./Plate";
 import { confirmAlert } from "react-confirm-alert";
+import { getCookie } from "typescript-cookie";
 
 interface Props {
   setShow: Dispatch<SetStateAction<boolean>>;
+  refreshCars: () => {};
 }
 
-export default function AddCarModal({ setShow }: Props) {
+export default function AddCarModal({ setShow, refreshCars }: Props) {
+  const [showToast, setShowToast] = useState<string>();
   const [hidden, setHidden] = useState(false);
 
   const [plate, setPlate] = useState("");
@@ -25,7 +28,7 @@ export default function AddCarModal({ setShow }: Props) {
   const [price, setPrice] = useState(0);
   const [kilometers, setKilometers] = useState(0);
   const [description, setDescription] = useState("");
-  const [images, setImages] = useState();
+  const [images, setImages] = useState<Array<File>>([]);
 
   const [models, setModels] = useState<Array<string>>([]);
 
@@ -39,19 +42,52 @@ export default function AddCarModal({ setShow }: Props) {
       fuel,
       price,
       kilometers,
-      0, // dealership id
+      getCookie("selected_dealership"),
       description,
     ];
 
     const form = getBasicFormData();
     form.append("car", JSON.stringify(car));
-    axios
-      .post(apiUrl + "add_car", form)
-      .then((response) => console.log(response.data));
+    axios.post(apiUrl + "add_car", form).then((response) => {
+      if (response.data.message === "success") {
+        notification(
+          "Ajout de véhicule",
+          "Véhicule ajouté avec succès",
+          "success"
+        );
+        refreshCars();
+        setShow(false);
+        images.forEach((x) => {
+          const imageForm = getBasicFormData();
+          imageForm.append("plate", plate);
+          imageForm.append("file", x);
+          axios.post(apiUrl + "post_image", imageForm);
+        });
+      } else if (response.data.message === "error") {
+        setShowToast("error");
+      }
+    });
   };
 
   return (
     <>
+      {showToast === "error" ? (
+        <Toast>
+          <Toast.Header>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded me-2"
+              alt=""
+            />
+            <strong className="me-auto">IMAKI POSTS</strong>
+            <small></small>
+          </Toast.Header>
+          <Toast.Body>
+            Une erreur s'est produite lors de l'ajout du véhicule. Veuillez
+            vérifier vos informations
+          </Toast.Body>
+        </Toast>
+      ) : null}
       <Modal
         show={true}
         backdrop={hidden ? false : "static"}
@@ -137,7 +173,11 @@ export default function AddCarModal({ setShow }: Props) {
             <Form.Control
               type="file"
               multiple
-              onChange={(e) => setImages((e.target as HTMLInputElement).files)}
+              onChange={(e) =>
+                setImages(
+                  Array.from((e.target as HTMLInputElement).files || [])
+                )
+              }
             />
           </Form.Group>
         </Modal.Body>

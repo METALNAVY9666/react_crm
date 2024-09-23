@@ -43,7 +43,7 @@ export default function SearchBox({
   }, []);
 
   return (
-    <div className="m-3">
+    <div className="my-3">
       <Form.Label>{title}</Form.Label>
       <br />
       {!confirmed ? (
@@ -67,7 +67,7 @@ export default function SearchBox({
           ? array.map((x, index) => (
               <button
                 key={index}
-                className="btn m-1"
+                className="btn m-1 border"
                 onClick={() => {
                   setConfirmed(true);
                   setText(x);

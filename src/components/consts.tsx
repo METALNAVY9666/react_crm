@@ -565,8 +565,26 @@ const brands = [
   "4 Stroke",
   "9FF",
 ];
+
 const fuels = ["SP95", "SP98", "E85", "GPL", "Gazole", "Électrique"];
+
 const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
 const numbers = "0123456789".split("");
 
-export { brands, alphabet, numbers, fuels };
+const socials = ["snapchat", "facebook", "instagram", "twitter"];
+
+interface socialImages {
+  [key: string]: string;
+}
+
+const socialImages: socialImages = {
+  snapchat: "https://cdn-icons-png.flaticon.com/512/1384/1384066.png",
+  facebook: "https://cdn-icons-png.flaticon.com/256/124/124010.png",
+  instagram:
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png",
+  twitter:
+    "https://freelogopng.com/images/all_img/1690643591twitter-x-logo-png.png",
+};
+
+export { brands, alphabet, numbers, fuels, socialImages, socials };

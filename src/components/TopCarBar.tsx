@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import SelectDealershipModal from "./DealershipComponents/SelectDealershipModal";
+import { apiUrl } from "./basics";
+import { getBasicFormData } from "./Functions";
+import { getCookie } from "typescript-cookie";
+import axios from "axios";
+import { DealershipArrayResponse } from "../types";
 
 interface Props {
   reloadCars: () => void;
@@ -6,17 +12,59 @@ interface Props {
 }
 
 export default function TopCarBar({ reloadCars, addCarModal }: Props) {
+  const [title, setTitle] = useState("");
+  const [showSelectDealershipModal, setShowSelectDealershipModal] =
+    useState(false);
+
+  const dealershipCookie = () => getCookie("selected_dealership");
+
+  const updateDealership = () => {
+    typeof getCookie("selected_dealership") == "undefined"
+      ? setShowSelectDealershipModal(true)
+      : null;
+    axios
+      .post<DealershipArrayResponse>(
+        apiUrl + "get_dealerships",
+        getBasicFormData()
+      )
+      .then((result) => {
+        setTitle(
+          result.data.data.filter(
+            (x) => String(x[0]) == dealershipCookie()
+          )[0][2]
+        );
+      });
+  };
+
+  const handleDealershipButton = () => {
+    setShowSelectDealershipModal(true);
+  };
+  useEffect(updateDealership, [showSelectDealershipModal]);
+
   return (
     <>
+      {showSelectDealershipModal ? (
+        <SelectDealershipModal setShow={setShowSelectDealershipModal} />
+      ) : null}
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
           <div className="collapse navbar-collapse">
             <div className="navbar-nav">
               <div>
-                <button onClick={() => addCarModal(true)}>Add Car</button>
+                <button className="mx-3" onClick={handleDealershipButton}>
+                  <small>Concession sélectionée : {title}</small>
+                </button>
+              </div>
+
+              <div>
+                <button className="mx-3" onClick={() => addCarModal(true)}>
+                  Ajouter un véhicule
+                </button>
               </div>
               <div>
-                <button onClick={reloadCars}>Reload Car</button>
+                <button className="mx-3" onClick={reloadCars}>
+                  Rafraîchir la page
+                </button>
               </div>
             </div>
           </div>
