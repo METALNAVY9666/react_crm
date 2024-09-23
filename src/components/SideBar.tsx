@@ -9,8 +9,17 @@ interface Props {
   children?: ReactNode;
 }
 
+const titles: Record<string, string> = {
+  home: "Acceuil",
+  settings: "Paramètres",
+  customers: "Clients",
+  dealerships: "Concessions",
+  publish: "Publication",
+};
+
 export default function SideBar({ setScene, children }: Props) {
   const updateScene = (s: string) => {
+    document.title = "IMAKI - " + titles[s];
     setCookie("previousScene", s);
     setScene(s);
   };
