@@ -85,6 +85,15 @@ export default function LoginModal(props: Props) {
     setRenderPayment(false);
     setPassword(event.currentTarget.value);
   };
+
+  const handleConfirmKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    console.log(event.key);
+    if (event.key == "Enter") {
+      handleLogin();
+    }
+    console.log(password);
+  };
+
   function handleSignupElementChange(
     event: ChangeEvent<HTMLInputElement>,
     key: string
@@ -311,6 +320,7 @@ export default function LoginModal(props: Props) {
 
           <Form.Label htmlFor="inputPassword">Mot de passe</Form.Label>
           <Form.Control
+            onKeyDown={handleConfirmKeyDown}
             type="password"
             id="inputPassword"
             onChange={handlePasswordChange}
