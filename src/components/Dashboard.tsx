@@ -5,6 +5,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { apiUrl } from "./basics";
 import axios from "axios";
 import MapSnippet from "./DashboardComponents/MapSnippet";
+import { getCookie } from "typescript-cookie";
 
 interface Props {
   name: string;
@@ -33,33 +34,21 @@ function RandomGreeting({ name }: Props) {
 }
 
 export default function Dashboard() {
-  const [logged, setLogged] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  const [dealership, setDealership] = useState<Array<string>>();
-  const [showCars, setShowCars] = useState<Array<Array<any>>>();
+  const [address, setAddress] = useState<string>("");
 
   useEffect(() => {
-    isLogged().then((result) => {
-      setLogged(result);
-      if (result) {
-        axios
-          .post(apiUrl + "name", getBasicFormData())
-          .then((response) => setName(response.data.name.split(" ")[0]));
+    const dealership_id = String(getCookie("selected_dealership")).valueOf();
 
-        axios
-          .post(apiUrl + "get_dealerships", getBasicFormData())
-          .then((response) => console.log(response.data.data));
-      }
-    });
+    axios
+      .post(apiUrl + "name", getBasicFormData())
+      .then((response) => setName(response.data.name.split(" ")[0]));
+
+    axios
+      .post(apiUrl + "get_dealerships", getBasicFormData())
+      .then((response) => setAddress(response.data.data[dealership_id][7]));
   }, []);
 
-  if (!logged) {
-    return (
-      <>
-        <img src={imakiImage} width={"25%"} />
-      </>
-    );
-  }
   return (
     <>
       <Container>
@@ -78,6 +67,13 @@ export default function Dashboard() {
               </h1>
             </div>
           </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h3 className="mx-auto">Votre concession</h3>
+            {address.length > 0 ? <MapSnippet address={address} /> : null}
+          </Col>
+          <Col></Col>
         </Row>
       </Container>
     </>

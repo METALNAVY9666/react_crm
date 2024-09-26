@@ -12,7 +12,7 @@ import { getCookie } from "typescript-cookie";
 
 interface Props {
   setShow: Dispatch<SetStateAction<boolean>>;
-  refreshCars: () => {};
+  refreshCars: () => void;
 }
 
 export default function AddCarModal({ setShow, refreshCars }: Props) {

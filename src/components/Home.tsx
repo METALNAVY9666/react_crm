@@ -27,7 +27,7 @@ export default function Home() {
     refreshCars();
     getDealershipList().then((dealerships) => {
       if (
-        dealerships.length() > 0 &&
+        dealerships.length > 0 &&
         typeof getCookie("selected_dealership") === "undefined"
       )
         setShowSelectDealership(true);

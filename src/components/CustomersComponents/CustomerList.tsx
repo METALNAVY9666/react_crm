@@ -56,7 +56,11 @@ export default function CustomerList() {
         </thead>
         <tbody>
           {customers.map((customer, index) => (
-            <CustomerListElement customer={customer} reloadFunction={get_customers} key={index}/>
+            <CustomerListElement
+              customer={customer}
+              reloadFunction={get_customers}
+              key={index}
+            />
           ))}
         </tbody>
       </table>

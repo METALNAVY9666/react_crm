@@ -10,11 +10,12 @@ interface Props {
 }
 
 const titles: Record<string, string> = {
-  home: "Acceuil",
+  home: "Véhicules",
   settings: "Paramètres",
   customers: "Clients",
   dealerships: "Concessions",
   publish: "Publication",
+  dashboard: "Accueil",
 };
 
 export default function SideBar({ setScene, children }: Props) {
@@ -80,7 +81,7 @@ export default function SideBar({ setScene, children }: Props) {
                     data-bs-placement="right"
                     data-bs-original-title="Orders"
                     style={{ cursor: "pointer" }}
-                    onClick={() => setScene("customers")}
+                    onClick={() => updateScene("customers")}
                   >
                     <i className="bi-chat fs-1"></i>
                   </a>
@@ -105,7 +106,7 @@ export default function SideBar({ setScene, children }: Props) {
                     className="nav-link py-3 px-2 link-dark"
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
-                    data-bs-original-title="Customers"
+                    data-bs-original-title="Équipe"
                   >
                     <i className="bi-people fs-1"></i>
                   </a>

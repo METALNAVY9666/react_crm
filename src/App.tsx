@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "react-datetime/css/react-datetime.css";
+import { Offline, Online } from "react-detect-offline";
 import { useEffect, useState } from "react";
 import LoginModal from "./components/LoginComponents/LoginModal";
 import Home from "./components/Home";
@@ -14,6 +15,8 @@ import CreateDealershipModal from "./components/DealershipComponents/CreateDeale
 import Dealerships from "./components/DealershipComponents/Dealerships";
 import CustomerList from "./components/CustomersComponents/CustomerList";
 import { ReactNotifications } from "react-notifications-component";
+import DinoGame from "react-chrome-dino-ts";
+import "react-chrome-dino-ts/index.css";
 
 export default function App() {
   const [logged, setLogged] = useState(false);
@@ -51,28 +54,33 @@ export default function App() {
 
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-      ></link>
+      <Online>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+        ></link>
 
-      {logged ? (
-        <div>
-          <ReactNotifications />
-          <SideBar setScene={setScene}>
-            {dealershipInitialized ? (
-              <div className="w-100">{scenes[scene]}</div>
-            ) : (
-              <CreateDealershipModal
-                setDealershipInitialized={setDealershipInitialized}
-                setScene={setScene}
-              />
-            )}
-          </SideBar>
-        </div>
-      ) : (
-        <LoginModal setLogged={setLogged} setScene={setScene} />
-      )}
+        {logged ? (
+          <div>
+            <ReactNotifications />
+            <SideBar setScene={setScene}>
+              {dealershipInitialized ? (
+                <div className="w-100">{scenes[scene]}</div>
+              ) : (
+                <CreateDealershipModal
+                  setDealershipInitialized={setDealershipInitialized}
+                  setScene={setScene}
+                />
+              )}
+            </SideBar>
+          </div>
+        ) : (
+          <LoginModal setLogged={setLogged} setScene={setScene} />
+        )}
+      </Online>
+      <Offline>
+        <DinoGame />
+      </Offline>
     </>
   );
 }
