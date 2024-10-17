@@ -46,6 +46,7 @@ export default function Home() {
         addCarModal={setShowAddCarModal}
         reloadCars={refreshCars}
       ></TopCarBar>
+      <h1>Véhicules</h1>
       <div className="container">
         <div className="row">
           {cars.length == 0 && !carsEmpty ? (
@@ -56,7 +57,7 @@ export default function Home() {
           ) : null}
           {carsEmpty ? "Pas de véhicule enregistré pour le moment" : null}
           {cars.map((car) => (
-            <CarThumbnail key={car[0]} data={car} />
+            <CarThumbnail key={car[0]} data={car} updateParent={refreshCars} />
           ))}
         </div>
       </div>

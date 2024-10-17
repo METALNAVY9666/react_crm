@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios, { AxiosRequestConfig } from "axios";
 import { apiUrl } from "./basics";
-import { getCookie } from "typescript-cookie";
 import { getBasicFormData } from "./Functions";
 
 interface Props {

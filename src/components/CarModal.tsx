@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import { apiUrl } from "./basics";
-import { getBasicFormData } from "./Functions";
+import { getBasicFormData, notification } from "./Functions";
 import { Modal } from "react-bootstrap";
 import CarImage from "./CarImage";
 import { AddImageModal } from "./AddImageModal";
@@ -19,6 +19,7 @@ interface Props {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
   setUpdateParentImage: Dispatch<SetStateAction<boolean>>;
+  setUpdateDelete: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function CarModal({
@@ -26,6 +27,7 @@ export default function CarModal({
   show,
   setShow,
   setUpdateParentImage,
+  setUpdateDelete,
 }: Props) {
   useEffect(() => {
     console.log(data);
@@ -126,8 +128,14 @@ export default function CarModal({
     formData.append("plate", plate);
     axios.post(apiUrl + "remove_car", formData).then(() => {
       setShow(false);
+      notification(
+        "Supression du véhicule",
+        brand + " " + model + " supprimée avec succès.",
+        "info"
+      );
+      updateParent();
+      setUpdateDelete(true);
     });
-    updateParent();
   };
 
   return (

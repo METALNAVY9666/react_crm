@@ -29,7 +29,7 @@ const isEmailValid = (email: string): boolean => {
 
 export default function CreateDealershipModal({
   setDealershipInitialized,
-  setScene
+  setScene,
 }: Props) {
   const [hidden, setHidden] = useState(false);
 
@@ -70,10 +70,13 @@ export default function CreateDealershipModal({
           "success"
         );
         setDealershipInitialized(true);
-        setScene("home")
-      } else {
-        alert("bruh");
-      }
+        setScene("home");
+      } else
+        notification(
+          "Ajout de la concession",
+          "Erreur de l'ajout de la concession",
+          "danger"
+        );
     });
   };
 

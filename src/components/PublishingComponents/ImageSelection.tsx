@@ -5,6 +5,9 @@ import { frenchEnumerate, getBasicFormData } from "../Functions";
 import { Modal } from "react-bootstrap";
 import CarImage from "../CarImage";
 import { confirmAlert } from "react-confirm-alert";
+import { socials } from "../consts";
+import PostFacebook from "./PublishingFunctions";
+import { getCookie } from "typescript-cookie";
 
 interface Props {
   ia: boolean;
@@ -20,6 +23,7 @@ export default function ImageSelection({
   setShowImageSelection,
 }: Props) {
   const [cars, setCars] = useState<Record<string, Array<string>>>({});
+  const selectedDealership = parseInt(String(getCookie("selected_dealership")));
   const [selectedCars, setSelectedCars] = useState<
     Record<string, Array<string>>
   >({});
@@ -84,17 +88,15 @@ export default function ImageSelection({
     }
   };
   const autoPost = () => {
-    for (const plate in selectedCars) {
-      const formData = getBasicFormData();
-      formData.append("plate", plate);
-      formData.append("socials", JSON.stringify(selectedSocials));
-      formData.append("file_list", JSON.stringify(selectedCars[plate]));
-      axios
-        .post(apiUrl + "auto_post", formData)
-        .then((response) => console.log(response.data.message));
-    }
+    console.log("socials:", selectedSocials);
+    selectedPlates.forEach((plate) => {
+      if (socials.includes("facebook"))
+        PostFacebook(selectedDealership, plate, "/auto", selectedCars[plate]);
+    });
+    setHidden(false);
     setShowImageSelection(false);
   };
+
   const handleImageSelect = (plate: string, filename: string) => {
     let selectedCarsCopy = structuredClone(selectedCars);
     const filenameIndex = selectedCars[plate].indexOf(filename);

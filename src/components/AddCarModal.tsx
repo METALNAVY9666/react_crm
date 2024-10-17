@@ -52,7 +52,7 @@ export default function AddCarModal({ setShow, refreshCars }: Props) {
       if (response.data.message === "success") {
         notification(
           "Ajout de véhicule",
-          "Véhicule ajouté avec succès",
+          brand + " " + model + " ajouté avec succès",
           "success"
         );
         refreshCars();
@@ -64,7 +64,11 @@ export default function AddCarModal({ setShow, refreshCars }: Props) {
           axios.post(apiUrl + "post_image", imageForm);
         });
       } else if (response.data.message === "error") {
-        setShowToast("error");
+        notification(
+          "Ajout de véhicule",
+          "Erreur lors de l'ajout de la " + brand + " " + model,
+          "danger"
+        );
       }
     });
   };

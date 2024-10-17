@@ -19,9 +19,6 @@ export default function TopCarBar({ reloadCars, addCarModal }: Props) {
   const dealershipCookie = () => getCookie("selected_dealership");
 
   const updateDealership = () => {
-    typeof getCookie("selected_dealership") == "undefined"
-      ? setShowSelectDealershipModal(true)
-      : null;
     axios
       .post<DealershipArrayResponse>(
         apiUrl + "get_dealerships",
@@ -41,10 +38,28 @@ export default function TopCarBar({ reloadCars, addCarModal }: Props) {
   };
   useEffect(updateDealership, [showSelectDealershipModal]);
 
+  const updateTitleAfterDealershipSelection = () => {
+    axios
+      .post<DealershipArrayResponse>(
+        apiUrl + "get_dealerships",
+        getBasicFormData()
+      )
+      .then((result) => {
+        setTitle(
+          result.data.data.filter(
+            (x) => String(x[0]) == getCookie("selected_dealership")
+          )[0][2]
+        );
+      });
+  };
+
   return (
     <>
       {showSelectDealershipModal ? (
-        <SelectDealershipModal setShow={setShowSelectDealershipModal} />
+        <SelectDealershipModal
+          setShow={setShowSelectDealershipModal}
+          updateParent={updateTitleAfterDealershipSelection}
+        />
       ) : null}
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">

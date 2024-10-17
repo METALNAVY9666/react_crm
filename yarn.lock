@@ -434,6 +434,11 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.5.tgz"
   integrity sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==
 
+"@types/facebook-js-sdk@^3.3.12":
+  version "3.3.12"
+  resolved "https://registry.npmjs.org/@types/facebook-js-sdk/-/facebook-js-sdk-3.3.12.tgz"
+  integrity sha512-X1JKH2s0rxsayEmS/NExj96byj59DNOk7jJIzkaqJUO1EM85+J4cS8run45Z4fgG7uFsZPkkdBBkNCxs5QA3Vw==
+
 "@types/geojson@*":
   version "7946.0.14"
   resolved "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.14.tgz"

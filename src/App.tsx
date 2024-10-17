@@ -4,9 +4,13 @@ import { Offline, Online } from "react-detect-offline";
 import { useEffect, useState } from "react";
 import LoginModal from "./components/LoginComponents/LoginModal";
 import Home from "./components/Home";
-import { getDealershipList, isLogged } from "./components/Functions";
+import {
+  getBasicFormData,
+  getDealershipList,
+  isLogged,
+} from "./components/Functions";
 import SideBar from "./components/SideBar";
-import { getCookie } from "typescript-cookie";
+import { getCookie, setCookie } from "typescript-cookie";
 import Settings from "./components/SettingsComponents/Settings";
 import Dashboard from "./components/Dashboard";
 import Publish from "./components/PublishingComponents/Publish";
@@ -17,6 +21,8 @@ import CustomerList from "./components/CustomersComponents/CustomerList";
 import { ReactNotifications } from "react-notifications-component";
 import DinoGame from "react-chrome-dino-ts";
 import "react-chrome-dino-ts/index.css";
+import axios from "axios";
+import { apiUrl } from "./components/basics";
 
 export default function App() {
   const [logged, setLogged] = useState(false);
@@ -48,6 +54,16 @@ export default function App() {
         getDealershipList().then((data) =>
           setDealershipInitialized(data.length > 0)
         );
+        const formData = getBasicFormData();
+        formData.append(
+          "dealership_id",
+          String(getCookie("selected_dealership"))
+        );
+        axios
+          .post(apiUrl + "fb_access_token_valid", formData)
+          .then((response) => {
+            setCookie("facebookConfigured", String(!response.data.expired));
+          });
       }
     });
   }, [logged]);

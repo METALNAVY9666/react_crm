@@ -7,9 +7,13 @@ import { getBasicFormData, notification } from "../Functions";
 
 interface Props {
   setShow: Dispatch<SetStateAction<boolean>>;
+  updateParent?: () => void;
 }
 
-export default function SelectDealershipModal({ setShow }: Props) {
+export default function SelectDealershipModal({
+  setShow,
+  updateParent = () => {},
+}: Props) {
   const [dealerships, setDealerships] = useState<Array<Array<any>>>([]);
 
   const selectAndLeave = (id: number) => {
@@ -21,6 +25,7 @@ export default function SelectDealershipModal({ setShow }: Props) {
       "info"
     );
     setShow(false);
+    updateParent();
   };
 
   useEffect(() => {

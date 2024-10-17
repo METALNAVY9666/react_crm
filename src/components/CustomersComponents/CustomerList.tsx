@@ -15,7 +15,7 @@ export default function CustomerList() {
     const dealership_id = getCookie("selected_dealership");
     const formData = getBasicFormData();
 
-    if (typeof dealership_id !== "string") {
+    if (typeof dealership_id === "undefined") {
       console.log("dealership_cookie not defined");
       return;
     }

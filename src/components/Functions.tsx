@@ -239,3 +239,9 @@ export function isFieldUsed(
     .get(apiUrl + "field_used/" + field + "/" + encodeURI(value))
     .then((response) => nextFunction(response.data.result));
 }
+
+export function getDealershipId() {
+  const cookie = getCookie("selected_dealership");
+  if (typeof cookie === "undefined") return 0;
+  return parseInt(cookie);
+}

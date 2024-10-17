@@ -1,5 +1,5 @@
 import { confirmAlert } from "react-confirm-alert";
-import { Button, Form } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { removeCookie } from "typescript-cookie";
 import { DoorClosed, DoorOpen } from "react-bootstrap-icons";
 import { useState } from "react";
@@ -35,11 +35,6 @@ export default function Profile() {
 
   return (
     <>
-      <div className="m-3">
-        <Form.Label>Setting random</Form.Label>
-        <Form.Control defaultValue=""></Form.Control>
-      </div>
-
       <Button
         onClick={confirmDisconnect}
         className="m-3 btn-dark"

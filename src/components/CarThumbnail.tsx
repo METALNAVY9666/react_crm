@@ -1,16 +1,17 @@
 import axios from "axios";
 import { getBasicFormData } from "./Functions";
 import { apiUrl } from "./basics";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Plate } from "./Plate";
 import CarModal from "./CarModal";
 import CarImage from "./CarImage";
 
 interface Props {
   data: Array<any>;
+  updateParent: Dispatch<SetStateAction<boolean>>;
 }
 
-export function CarThumbnail({ data }: Props) {
+export function CarThumbnail({ data, updateParent }: Props) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [images, setImages] = useState<Array<string>>([]);
   const plate = data[0];
@@ -45,6 +46,7 @@ export function CarThumbnail({ data }: Props) {
           show={showModal}
           setShow={setShowModal}
           setUpdateParentImage={setUpdateThisImage}
+          setUpdateDelete={updateParent}
         />
         <div
           className={divClass}

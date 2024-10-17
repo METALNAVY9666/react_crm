@@ -6,6 +6,7 @@ import { apiUrl } from "./basics";
 import axios from "axios";
 import MapSnippet from "./DashboardComponents/MapSnippet";
 import { getCookie } from "typescript-cookie";
+import Stats from "./DashboardComponents/Stats";
 
 interface Props {
   name: string;
@@ -36,6 +37,7 @@ function RandomGreeting({ name }: Props) {
 export default function Dashboard() {
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [dealershipName, setDealershipName] = useState<string>("");
 
   useEffect(() => {
     const dealership_id = String(getCookie("selected_dealership")).valueOf();
@@ -46,7 +48,11 @@ export default function Dashboard() {
 
     axios
       .post(apiUrl + "get_dealerships", getBasicFormData())
-      .then((response) => setAddress(response.data.data[dealership_id][7]));
+      .then((response) => {
+        const dealership = response.data.data[dealership_id];
+        setAddress(dealership[7]);
+        setDealershipName(dealership[2]);
+      });
   }, []);
 
   return (
@@ -70,10 +76,14 @@ export default function Dashboard() {
         </Row>
         <Row>
           <Col>
-            <h3 className="mx-auto">Votre concession</h3>
+            <h3 className="mx-auto">
+              Concession sélectionnée : {dealershipName}
+            </h3>
             {address.length > 0 ? <MapSnippet address={address} /> : null}
           </Col>
-          <Col></Col>
+          <Col>
+            <Stats />
+          </Col>
         </Row>
       </Container>
     </>

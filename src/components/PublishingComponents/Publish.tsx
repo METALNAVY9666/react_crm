@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { socials, socialImages } from "../consts";
 import { apiUrl } from "../basics";
-import { capitalize, frenchEnumerate, getBasicFormData } from "../Functions";
+import { capitalize, getBasicFormData, notification } from "../Functions";
 import axios from "axios";
 import { Container, Row, Col, Stack } from "react-bootstrap";
-import { confirmAlert } from "react-confirm-alert";
 import CarImage from "../CarImage";
 import CarBadge from "./CarBadge";
 import ImageSelection from "./ImageSelection";
+import { getCookie } from "typescript-cookie";
+import FacebookSetupModal from "../SettingsComponents/FacebookSetupModal";
 
 export default function Publish() {
+  const [showFacebookConfigModal, setShowFacebookConfigModal] =
+    useState<boolean>(getCookie("facebookConfigured") !== "true");
+
   const [showImageSelection, setShowImageSelection] = useState<boolean>(false);
   const [carSearch, setCarSearch] = useState<string>("");
   const [cars, setCars] = useState<Array<Array<any>>>([]);
@@ -38,6 +42,14 @@ export default function Publish() {
   const handleSocial = (social: string) => {
     const socialIndex = selectedSocials.indexOf(social);
     if (socialIndex == -1) {
+      switch (social) {
+        case "facebook":
+          if (getCookie("facebookConfigured") !== "true") {
+            notification("Configuration Facebook", "Facebook KO !", "danger");
+            setShowFacebookConfigModal(true);
+            return;
+          }
+      }
       setSelectedSocials([...selectedSocials, social]);
       return;
     }
@@ -49,49 +61,14 @@ export default function Publish() {
   const handleCarSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCarSearch(e.currentTarget.value);
   };
-
-  const handleConfirm = () => {
-    if (selectedPlates.length > 0 && selectedSocials.length > 0) {
-      let message = "Êtes-vous sûr de vouloir publier ";
-
-      if (selectedPlates.length > 1) {
-        message += "les véhicules immatriculés ";
-      } else {
-        message += "le véhicule immatriculé ";
-      }
-
-      message +=
-        frenchEnumerate(selectedPlates) +
-        " sur " +
-        frenchEnumerate(selectedSocials, true);
-
-      if (ia) {
-        message += " avec une description générée par Turbo";
-      }
-
-      message += " ?";
-
-      confirmAlert({
-        title: "Publication",
-        message: message,
-        closeOnEscape: false,
-        closeOnClickOutside: false,
-        buttons: [
-          {
-            label: "Oui",
-            onClick: () => {},
-          },
-          {
-            label: "Non",
-          },
-        ],
-      });
-    }
-  };
   return (
     <>
+      {showFacebookConfigModal ? (
+        <FacebookSetupModal setShowModal={setShowFacebookConfigModal} />
+      ) : null}
       {showImageSelection ? (
         <ImageSelection
+          ia={ia}
           selectedPlates={selectedPlates}
           selectedSocials={selectedSocials}
           setShowImageSelection={setShowImageSelection}
