@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { apiUrl } from "../../basics";
 import { getCookie, setCookie } from "typescript-cookie";
 import { notification } from "../../Functions";
@@ -11,6 +11,19 @@ declare global {
 
 interface Props {
   setLoginSuccessful: Dispatch<SetStateAction<boolean>>;
+}
+
+interface FacebookAuthResponse {
+  accessToken: string;
+  expiresIn: number;
+  reauthorize_required_in: number;
+  signedRequest: string;
+  userID: string;
+}
+
+interface FacebookLoginResponse {
+  status: string;
+  authResponse: FacebookAuthResponse;
 }
 
 function FacebookLogin({ setLoginSuccessful }: Props) {
@@ -27,21 +40,22 @@ function FacebookLogin({ setLoginSuccessful }: Props) {
 
     // Charger le SDK Facebook de façon asynchrone
     (function (d, s, id) {
-      var js,
+      let js: HTMLScriptElement | null = d.createElement(
+          s
+        ) as HTMLScriptElement,
         fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {
         return;
       }
-      js = d.createElement(s);
       js.id = id;
       js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
+      fjs?.parentNode?.insertBefore(js, fjs);
     })(document, "script", "facebook-jssdk");
   }, []);
 
   const handleFacebookLogin = () => {
     window.FB.login(
-      function (response) {
+      function (response: FacebookLoginResponse) {
         if (response.authResponse) {
           console.log("Successfully logged in", response);
           const accessToken = response.authResponse.accessToken;

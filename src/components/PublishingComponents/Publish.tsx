@@ -34,7 +34,7 @@ export default function Publish() {
       return;
     }
     setSelectedPlates(
-      selectedPlates.filter((x, index) => index !== plateIndex)
+      selectedPlates.filter((_, index) => index !== plateIndex)
     );
   };
 
@@ -54,7 +54,7 @@ export default function Publish() {
       return;
     }
     setSelectedSocials(
-      selectedSocials.filter((x, index) => index !== socialIndex)
+      selectedSocials.filter((_, index) => index !== socialIndex)
     );
   };
 

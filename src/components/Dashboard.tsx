@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBasicFormData, isLogged } from "./Functions";
+import { getBasicFormData } from "./Functions";
 import imakiImage from "../assets/imaki.png";
 import { Col, Container, Row } from "react-bootstrap";
 import { apiUrl } from "./basics";

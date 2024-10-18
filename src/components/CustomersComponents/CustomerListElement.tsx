@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EditCustomerModal from "./EditCustomerModal";
 
 interface Props {
@@ -6,7 +6,10 @@ interface Props {
   reloadFunction: () => void;
 }
 
-export default function CustomerListElement({ customer, reloadFunction }: Props) {
+export default function CustomerListElement({
+  customer,
+  reloadFunction,
+}: Props) {
   const [showEditCustomerModal, setShowEditCustomerModal] = useState(false);
 
   return (
@@ -23,12 +26,14 @@ export default function CustomerListElement({ customer, reloadFunction }: Props)
         {customer.slice(2, 4).map((x) => (
           <td>{x}</td>
         ))}
-        <td><button
-          className="bg-dark text-white"
-          onClick={() => setShowEditCustomerModal(true)}
-        >
-          <i className="bi bi-sliders"></i>
-        </button></td>
+        <td>
+          <button
+            className="bg-dark text-white"
+            onClick={() => setShowEditCustomerModal(true)}
+          >
+            <i className="bi bi-sliders"></i>
+          </button>
+        </td>
       </tr>
     </>
   );

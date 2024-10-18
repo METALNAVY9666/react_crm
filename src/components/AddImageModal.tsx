@@ -110,7 +110,10 @@ export function AddImageModal({ plate, setShow, setChanges }: Props) {
             multiple
             accept="image/png, image/jpeg, image/jpg"
             onChange={(e) =>
-              setImageFiles((imageFiles) => [...imageFiles, ...e.target.files])
+              setImageFiles((imageFiles) => [
+                ...imageFiles,
+                ...(e.target.files ? Array.from(e.target.files) : []),
+              ])
             }
           />
           {progressBar}

@@ -39,10 +39,6 @@ export default function ImageSelection({
     return true;
   };
 
-  const keysOf = (object: Object) => {
-    return Object.keys(object);
-  };
-
   const handleCancel = () => setShowImageSelection(false);
   const handleConfirm = () => {
     if (selectedPlates.length > 0 && selectedSocials.length > 0) {

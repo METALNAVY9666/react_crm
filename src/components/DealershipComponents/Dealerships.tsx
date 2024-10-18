@@ -9,7 +9,6 @@ import { updateDealership } from "../NetworkFunctions";
 export default function Dealerships() {
   const [dealerships, setDealerships] = useState<Array<Array<any>>>([]);
   const [editIndex, setEditIndex] = useState(-1);
-  const [lockedIndexes, setLockedIndexes] = useState<Array<number>>([]);
 
   const [siren, setSiren] = useState("");
   const [number, setNumber] = useState("");

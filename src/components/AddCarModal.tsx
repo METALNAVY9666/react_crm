@@ -1,5 +1,5 @@
-import { Modal, Form, Toast } from "react-bootstrap";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Modal, Form } from "react-bootstrap";
+import { Dispatch, SetStateAction, useState } from "react";
 import { apiUrl } from "./basics";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import SearchBox from "./SearchBox";
@@ -16,7 +16,6 @@ interface Props {
 }
 
 export default function AddCarModal({ setShow, refreshCars }: Props) {
-  const [showToast, setShowToast] = useState<string>();
   const [hidden, setHidden] = useState(false);
 
   const [plate, setPlate] = useState("");
@@ -75,23 +74,6 @@ export default function AddCarModal({ setShow, refreshCars }: Props) {
 
   return (
     <>
-      {showToast === "error" ? (
-        <Toast>
-          <Toast.Header>
-            <img
-              src="holder.js/20x20?text=%20"
-              className="rounded me-2"
-              alt=""
-            />
-            <strong className="me-auto">IMAKI POSTS</strong>
-            <small></small>
-          </Toast.Header>
-          <Toast.Body>
-            Une erreur s'est produite lors de l'ajout du véhicule. Veuillez
-            vérifier vos informations
-          </Toast.Body>
-        </Toast>
-      ) : null}
       <Modal
         show={true}
         backdrop={hidden ? false : "static"}
@@ -99,7 +81,7 @@ export default function AddCarModal({ setShow, refreshCars }: Props) {
         style={{ visibility: hidden ? "hidden" : "visible" }}
       >
         <Modal.Header>
-          Ajouter un véhicule <Plate plate={plate}></Plate>
+          Ajouter un véhicule <Plate plate={plate} percent={"200%"}></Plate>
         </Modal.Header>
 
         <Modal.Body>

@@ -1,4 +1,4 @@
-const publicHost = "api.imaki.org";
+// const publicHost = "api.imaki.org";
 const localHost = "127.0.0.1";
 
 const apiUrl = "http://" + localHost + ":8080/";

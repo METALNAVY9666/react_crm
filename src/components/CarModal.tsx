@@ -45,7 +45,7 @@ export default function CarModal({
   const [fuel, setFuel] = useState<string>(data[5]);
   const [price, setPrice] = useState<number>(data[6]);
   const [kilometers, setKilometers] = useState<number>(data[7]);
-  const [dealership, setDealership] = useState<string>(data[8]);
+  const dealership: string = data[8];
   const [description, setDescription] = useState<string>(data[9]);
   const [filenames, setFilenames] = useState<Array<string>>([]);
 

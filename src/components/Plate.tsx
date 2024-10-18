@@ -1,5 +1,6 @@
 import "./Plate.css";
 import { alphabet, numbers } from "./consts";
+import empty_plate from "../assets/empty_plate.png";
 
 function isPlateValid(plate: string) {
   plate = plate.toLowerCase();
@@ -47,7 +48,7 @@ function Plate({ plate, percent }: Props) {
   return (
     <>
       <div className="overlay-container">
-        <img src="./src/assets/empty_plate.png" style={{ width: "100%" }}></img>
+        <img src={empty_plate} style={{ width: "100%" }}></img>
         <div
           className="centered"
           style={{ whiteSpace: "nowrap", fontSize: percent }}

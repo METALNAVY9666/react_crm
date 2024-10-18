@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { getBasicFormData, notification } from "../Functions";
 import { apiUrl } from "../basics";

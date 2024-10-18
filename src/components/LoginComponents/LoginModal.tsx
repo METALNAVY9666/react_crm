@@ -79,25 +79,23 @@ export default function LoginModal(props: Props) {
   );
   const [checkoutSessionId, setCheckoutSessionId] = useState<string>("");
   const [clientSecret, setClientSecret] = useState<string>();
-  const [sessionStatus, setSessionStatus] = useState<string>("");
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setRenderPayment(false);
     setPassword(event.currentTarget.value);
   };
 
-  const handleConfirmKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+  const handleConfirmKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     console.log(event.key);
-    if (event.key == "Enter") {
+    if (event.key === "Enter") {
       handleLogin();
     }
     console.log(password);
   };
 
-  function handleSignupElementChange(
-    event: ChangeEvent<HTMLInputElement>,
-    key: string
-  ) {
+  function handleSignupElementChange(event: ChangeEvent<any>, key: string) {
     const text = event.currentTarget.value;
 
     setRenderPayment(false);
@@ -210,28 +208,18 @@ export default function LoginModal(props: Props) {
   };
 
   const handleSignup = () => {
-    if (sessionStatus === "complete") {
-      if (fieldsValid) {
-        // le paiement est fait et les informations sont correctes
-        finalSignup();
+    if (fieldsValid) {
+      // les champs sont corrects, mais l'utilisateur n'a pas payé
+      if (renderPayment) {
+        // l'utilisateur n'a pas payé
+        setMsg("Pour ouvrir un compte, veuillez vous abonner.");
       } else {
-        // le paiement est fait, mais les informations sont incorrectes
-        setMsg("Certains champs ne sont pas corrects.");
+        // le paiement n'a pas été initialisé
+        initPayment();
       }
     } else {
-      if (fieldsValid) {
-        // les champs sont corrects, mais l'utilisateur n'a pas payé
-        if (renderPayment) {
-          // l'utilisateur n'a pas payé
-          setMsg("Pour ouvrir un compte, veuillez vous abonner.");
-        } else {
-          // le paiement n'a pas été initialisé
-          initPayment();
-        }
-      } else {
-        // les champs sont incorrects, et l'utilisateur n'a pas payé
-        setRenderPayment(false);
-      }
+      // les champs sont incorrects, et l'utilisateur n'a pas payé
+      setRenderPayment(false);
     }
   };
 
