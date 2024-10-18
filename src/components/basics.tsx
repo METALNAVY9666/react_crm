@@ -1,7 +1,6 @@
-const publicHost = "api.imaki.fr";
-// const localHost = "127.0.0.1";
+import apiConstUrl from "../assets/settings.json";
 
-const apiUrl = "http://" + publicHost + ":8080/";
+const apiUrl = "http://" + apiConstUrl + ":8080/";
 
 class Car {
   plate = "";
