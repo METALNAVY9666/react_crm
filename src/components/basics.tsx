@@ -1,6 +1,6 @@
-import apiConstUrl from "../assets/settings.json";
+import settings from "../assets/settings.json";
 
-const apiUrl = "http://" + apiConstUrl + ":8080/";
+const apiUrl = "http://" + settings.apiConstUrl + ":8080/";
 
 class Car {
   plate = "";
