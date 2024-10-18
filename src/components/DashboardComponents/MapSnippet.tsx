@@ -3,10 +3,11 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Spinner } from "react-bootstrap";
+import garageIcon from "../../assets/garage.svg";
 
 // Icon for the marker (optional)
 const markerIcon = new L.Icon({
-  iconUrl: "src/assets/garage.svg",
+  iconUrl: garageIcon,
   iconSize: [38, 38],
 });
 
