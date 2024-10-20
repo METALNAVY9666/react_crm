@@ -40,6 +40,8 @@ export default function LoginModal(props: Props) {
     name: "Prénom Nom",
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const [show, setShow] = useState(true);
   const [msg, setMsg] = useState("");
 
@@ -307,13 +309,27 @@ export default function LoginModal(props: Props) {
             : null}
 
           <Form.Label htmlFor="inputPassword">Mot de passe</Form.Label>
-          <Form.Control
-            onKeyDown={handleConfirmKeyDown}
-            type="password"
-            id="inputPassword"
-            onChange={handlePasswordChange}
-            disabled={renderPayment}
-          />
+          <div className="d-flex">
+            <Form.Control
+              onKeyDown={handleConfirmKeyDown}
+              type={showPassword ? "" : "password"}
+              id="inputPassword"
+              onChange={handlePasswordChange}
+              disabled={renderPayment}
+            />
+            <button
+              className={
+                showPassword
+                  ? "btn btn-white btn-md ms-1 border border-dark"
+                  : "btn btn-dark btn-md ms-1 border border-dark"
+              }
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+            >
+              <i className="bi bi-eye"></i>
+            </button>
+          </div>
 
           {signup
             ? passwordHints.map((hint, key) => (
