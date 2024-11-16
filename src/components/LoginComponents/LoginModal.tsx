@@ -90,11 +90,7 @@ export default function LoginModal(props: Props) {
   const handleConfirmKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    console.log(event.key);
-    if (event.key === "Enter") {
-      handleLogin();
-    }
-    console.log(password);
+    if (event.key === "Enter") handleLogin(username, password);
   };
 
   function handleSignupElementChange(event: ChangeEvent<any>, key: string) {
@@ -120,17 +116,17 @@ export default function LoginModal(props: Props) {
   const handleClose = () => setShow(false);
 
   // gestion connexion
-  const handleLogin = () => {
+  const handleLogin = (userArg: string, passwordArg: string) => {
     setMsg("");
     const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", sha256.create().update(password).hex());
+    formData.append("username", userArg);
+    formData.append("password", sha256.create().update(passwordArg).hex());
     axios.post(apiUrl + "login", formData).then((response) => {
       setMsg(response.data.message);
       if (response.data.message === "Authentification réussie") {
         removeCookie("selected_dealership");
         setCookie("cookie", response.data.cookie);
-        setCookie("username", username);
+        setCookie("username", userArg);
         props.setLogged(true);
         props.setScene("dashboard");
       } else {
@@ -175,8 +171,6 @@ export default function LoginModal(props: Props) {
     } else setNameHints([]);
 
     const usernameValidation = isValidUsername(username);
-    console.log(username);
-    console.log(usernameValidation);
     if (usernameValidation.isValid) {
       isFieldUsed("username", username, (used: boolean) => {
         if (used) {
@@ -385,9 +379,17 @@ export default function LoginModal(props: Props) {
             <button
               id="login-btn"
               className="btn btn-dark"
-              onClick={signup ? handleSignup : handleLogin}
+              onClick={
+                signup ? handleSignup : () => handleLogin(username, password)
+              }
             >
               {signup ? "S'abonner" : "Se connecter"}
+            </button>
+            <button
+              className="btn btn-lg btn-dark text-white mx-auto w-50 mt-4"
+              onClick={() => handleLogin("test_user", "TestUser123!")}
+            >
+              Démo
             </button>
           </Modal.Footer>
         ) : null}
